@@ -1,0 +1,8 @@
+{
+  "name": "crm-prototype",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix client run build",
+    "dev": "npm --prefix server start"
+  }
+}

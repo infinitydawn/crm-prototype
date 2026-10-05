@@ -1,0 +1,20 @@
+# Render blueprint — defines the backend + Postgres (Neon) wiring for Render.
+# Render reads this automatically when you connect this GitHub repo.
+#
+# Create the Neon Postgres instance in the Neon console first, then paste its
+# connection string into this env var (Edit > Environment on the Render service),
+# or set it directly on the service. Do NOT commit the real string.
+
+services:
+  - type: web
+    name: crm-backend
+    runtime: node
+    plan: free
+    buildCommand: cd server && npm install
+    startCommand: cd server && node index.js
+    healthCheckPath: /api/boards
+    envVars:
+      - key: DATABASE_URL
+        sync: false          # set manually (Neon connection string)
+      - key: CORS_ORIGIN
+        sync: false          # set to your Vercel frontend URL
