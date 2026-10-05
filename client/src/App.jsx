@@ -10,6 +10,11 @@ import BoardList from './components/BoardList.jsx';
 import BoardView from './components/BoardView.jsx';
 
 /** Top-level app shell: top bar + sidebar + view-state routing. */
+function labelFor(key) {
+  const map = { home: 'Home', mywork: 'My Work', dashboards: 'Dashboards', calendar: 'Calendar', reports: 'Reports' };
+  return map[key] || (key ? key[0].toUpperCase() + key.slice(1) : '');
+}
+
 export default function App() {
   const [view, setView] = React.useState({ type: 'entity', entity: 'tasks' });
   const [users, setUsers] = React.useState([]);
@@ -21,6 +26,11 @@ export default function App() {
   }, []);
 
   function openEntity(entity) {
+    // 'boards' is a special surface (the Monday-style board view), not an entity.
+    if (entity === 'boards') {
+      setView({ type: 'boards' });
+      return;
+    }
     setView({ type: 'entity', entity, selectedId: undefined });
   }
 
@@ -52,7 +62,7 @@ export default function App() {
             ) : (
               <BoardList onOpen={(id) => setView({ type: 'boards', selectedBoardId: id })} />
             )
-          ) : (
+          ) : ENTITIES[view.entity] ? (
             <EntityList
               entityKey={view.entity}
               users={users}
@@ -60,6 +70,11 @@ export default function App() {
               onOpenRecord={openRecord}
               onCloseRecord={() => setView((v) => ({ ...v, selectedId: undefined }))}
             />
+          ) : (
+            <div className="grid-empty">
+              <h2>{labelFor(view.entity)}</h2>
+              <p>This surface is coming next.</p>
+            </div>
           )}
         </main>
       </div>
