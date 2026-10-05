@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { pool, waitForDb } from './db.js';
+import recordsRouter from './records.js';
 
 const app = express();
 app.use(cors({ origin: process.env.CORS_ORIGIN || true }));
@@ -272,6 +273,11 @@ app.put('/api/items/:id/values', async (req, res) => {
     err(res, 500, e.message);
   }
 });
+
+// ---- Unified record-model API (tasks, projects, contacts, accounts, leads,
+// opportunities, activities, comments, users). Mounted LAST so specific board
+// routes above win for /boards*, while /tasks, /contacts, ... fall through here.
+app.use('/api', recordsRouter);
 
 // ---- Boot ----
 
