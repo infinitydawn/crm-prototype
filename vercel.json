@@ -1,7 +1,4 @@
 {
-  "rootDirectory": "client",
-  "framework": "vite",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "rewrites": []
+  "installCommand": "npm install"
 }
